@@ -5,7 +5,6 @@ export const debounce = (time: number = 1000): Middleware => {
 
   return (state: State) => {
     if (!shouldDispatch) return null
-
     shouldDispatch = false
     setTimeout(() => { shouldDispatch = true }, time)
     return state
