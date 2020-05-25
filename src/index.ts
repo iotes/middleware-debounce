@@ -1,46 +1,15 @@
-import {
-  DeviceFactory,
-  HostConfig,
-  Strategy,
-  ClientConfig,
-  DeviceConfig,
-} from '@iotes/core'
-import { DeviceTypes, StrategyConfig } from './types'
+import { State, Middleware } from '@iotes/core'
 
-export const xStrategy: Strategy<StrategyConfig, DeviceTypes> = ({
-  hostDispatch,
-  deviceDispatch,
-  hostSubscribe,
-  deviceSubscribe,
-}) => async (
-  hostConfig: HostConfig<StrategyConfig>,
-  clientConfig: ClientConfig,
-): Promise<DeviceFactory<DeviceTypes>> => {
-  // HOST FACTORY
-  // Do host set up here
+export const debounce = (time: number = 1000): Middleware => {
+  let shouldDispatch = true
 
-  const deviceFactory = (): DeviceFactory<DeviceTypes> => {
-    // DEVICE FACTORIES
+  return (state: State) => {
+    if (!shouldDispatch) return null
 
-    const createDevice = async (
-      deviceConfig: DeviceConfig<'DEVICE_TYPE'>,
-    ) => {
-      // Do device set up here
-      const deviceSetUp = () => {}
-
-      deviceSetUp()
-
-      return deviceConfig
-    }
-
-    // Return dictionary of device factories
-    return {
-      DEVICE_TYPE: createDevice,
-    }
+    shouldDispatch = false
+    setTimeout(() => { shouldDispatch = true }, time)
+    return state
   }
-
-  return deviceFactory()
 }
 
-// Export types
-export { DeviceTypes, StrategyConfig }
+export default debounce

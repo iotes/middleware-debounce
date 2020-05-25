@@ -1,17 +1,13 @@
 # Setting up this template
 
-- Change package name in package.json
-- Change the git repo path in package.json (Not doing this will cause github packages release to fail)
-- Change the function name in index
-
-# `iotes/strategy-xxx`
+# `iotes/middleware-debounce`
 
 > TODO: description
 
 ## Usage
 
 ```
-import strategy from '@iotes/strategy-xxx'
+import strategy from '@iotes/middleware-debounce'
 
 // TODO: DEMONSTRATE USAGE
 ```
