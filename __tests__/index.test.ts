@@ -1,59 +1,51 @@
-// This needs to implemented with strategy-test
-/*
+import {
+  createIotes,
+  createDeviceDispatchable,
+} from '@iotes/core'
+
+import {
+  createTestStrategy,
+  config,
+  wait,
+} from '@iotes/strategy-test'
+
+import { debounce } from '../src'
 
 describe('Debounce Middleware', () => {
-  beforeEach(async () => {
-    [localStore, createLocalStrategy] = createLocalStoreAndStrategy()
-    localModule = createIotes({
-      topology: testTopologoy,
-      strategy: createLocalStrategy,
+  // TESTS
+  test('Debouces', async () => {
+    const [remote, strategy] = createTestStrategy()
+    const iotes = createIotes({
+      topology: config.topology,
+      strategy,
     })
-  })
 
-  test('debounces', async () => {
     let result: any = null
     let i = 1
 
-    localModule.deviceSubscribe(
-      (state) => {
-        result = state
-      },
-      undefined,
-      [debounce(50)],
-    )
+    iotes.deviceSubscribe((state) => { result = state }, undefined, [debounce(50)])
 
-    localModule.deviceDispatch(
+    // Initial value
+    iotes.deviceDispatch(
       createDeviceDispatchable('debounce', 'UPDATE', { i }),
     )
     i += 1
 
+    // Dispatch many messages quickly
     const timer = setInterval(() => {
-      if (i > 10) clearInterval(timer)
-      localModule.deviceDispatch(
+      i += 1
+      iotes.deviceDispatch(
         createDeviceDispatchable('debounce', 'UPDATE', { i }),
       )
-      i += 1
+      if (i > 10) clearInterval(timer)
     }, 5)
 
-    // Wait for something to come in
-    await new Promise((res, rej) => setTimeout(() => {
-      if (result) {
-        res()
-      }
-      rej()
-    }, 35))
+    await wait(45)
 
     expect(result.debounce.payload.i).toEqual(1)
 
-    await new Promise((res, rej) => setTimeout(() => {
-      if (result) {
-        res()
-      }
-      rej()
-    }, 20))
+    await wait(50)
 
     expect(result.debounce.payload.i).toEqual(10)
   })
 })
-
-*/
