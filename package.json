@@ -1,6 +1,6 @@
 {
   "name": "@iotes/middleware-debounce",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "An Iotes middleware to bebounce messages to subscribers",
   "repository": "git://github.com/iotes/middleware-debounce.git",
   "homepage": "https://iotes.dev",
